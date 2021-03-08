@@ -1,16 +1,10 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using FluentValidation;
 using FluentValidation.AspNetCore;
 using MediatR;
@@ -18,8 +12,10 @@ using TestCQRS.Models;
 using TestCQRS.Validators;
 using TestCQRS.Providers;
 using TestCQRS.Providers.Implementations;
-using TestCQRS.Infrastructure;
 using TestCQRS.Lifecycle;
+using TestCQRS.Types;
+using TestCQRS.Services;
+using TestCQRS.Services.Implementations;
 
 namespace TestCQRS
 {
@@ -52,6 +48,9 @@ namespace TestCQRS
             services.AddTransient<ITransientService, TransientService>();
             services.AddScoped<IScopedService, ScopedService>();
             services.AddSingleton<ISingletonService, SingletonService>();
+
+            services.AddScoped<ITranscriptionService, AzureTranscriptionService>();
+            services.AddScoped<ITranscriptionService, SpeechmaticTranscriptionService>();
 
             var emailConfiguration = Configuration.GetValue<string>("EmailConfiguration");
             services.AddSingleton((Func<IServiceProvider, IEmailProvider>)(serviceProvider =>

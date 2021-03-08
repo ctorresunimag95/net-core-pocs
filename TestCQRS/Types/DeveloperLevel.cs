@@ -1,4 +1,4 @@
-﻿namespace TestCQRS.Infrastructure
+﻿namespace TestCQRS.Types
 {
     public enum DeveloperLevel
     {

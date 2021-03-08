@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using System.Collections.Generic;
 using TestCQRS.Lifecycle;
+using TestCQRS.Services;
 
 namespace TestCQRS.Controllers
 {
@@ -14,12 +16,15 @@ namespace TestCQRS.Controllers
         private ISingletonService _singletonService1;
         private ISingletonService _singletonService2;
 
+        private IEnumerable<ITranscriptionService> _transcriptionServices;
+
         public HomeController(ITransientService transientService1,
             ITransientService transientService2,
             IScopedService scopedService1,
             IScopedService scopedService2,
             ISingletonService singletonService1,
-            ISingletonService singletonService2)
+            ISingletonService singletonService2,
+            IEnumerable<ITranscriptionService> transcriptionServices)
         {
             _transientService1 = transientService1;
             _transientService2 = transientService2;
@@ -29,6 +34,8 @@ namespace TestCQRS.Controllers
 
             _singletonService1 = singletonService1;
             _singletonService2 = singletonService2;
+
+            _transcriptionServices = transcriptionServices;
         }
 
         [HttpGet]

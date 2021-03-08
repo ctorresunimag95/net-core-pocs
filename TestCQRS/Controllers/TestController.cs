@@ -5,7 +5,7 @@ using MediatR;
 using TestCQRS.Models;
 using TestCQRS.Providers;
 using static TestCQRS.Startup;
-using TestCQRS.Infrastructure;
+using TestCQRS.Types;
 
 namespace TestCQRS.Controllers
 {
@@ -30,7 +30,7 @@ namespace TestCQRS.Controllers
         {
             await QueryAsync(new Queries.GetValuesQuery.Query());
             return Ok();
-        }
+        } 
 
         [HttpPost]
         [Route("make-order")]
@@ -52,20 +52,16 @@ namespace TestCQRS.Controllers
         }
 
         [HttpGet]
-        [Route("test2")]
-        public IActionResult Test2()
-        {
-            var emailMessage = _emailProvider.SendEmail();
-            return Ok(emailMessage);
-        }
-
-        [HttpGet]
         [Route("salaryCalculator")]
-        public async Task<IActionResult> SalaryCalculatorAsync(int developerType)
+        public async Task<IActionResult> SalaryCalculatorAsync()
         {
-            var salaryCalculator = _salaryCalculatorDelegate((DeveloperLevel)developerType);
+            var salaryCalculator = _salaryCalculatorDelegate(DeveloperLevel.Junior);
+            var seniorCalculator = _salaryCalculatorDelegate(DeveloperLevel.Senior);
+
             var totalSalary = await salaryCalculator.CalculateTotalSalary(40);
-            return Ok(totalSalary);
+            var totalSenior = await seniorCalculator.CalculateTotalSalary(40);
+
+            return Ok();
         }
 
     }
